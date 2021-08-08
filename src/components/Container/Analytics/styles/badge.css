@@ -1,0 +1,32 @@
+.icon-style{
+   width: 80px;
+   height: 80px;
+   margin-left: 5px;
+   box-shadow: 4px 2px 4px 0px rgb(50 50 50 / 53%);
+}
+
+.badge-value-style{
+    font-size: 35px !important;
+    text-align: left;
+}
+
+.badge-description-style{
+    font-size: 17px !important;
+    text-align: left;
+}
+
+.badge-style{
+    box-shadow: #ffc107 2px 2px 2px;
+    border-radius: 10px !important;
+}
+
+@media (max-width: 1250px){
+    .badge-value-style{
+        text-align: center;
+    }
+    
+    .badge-description-style{
+        text-align: center;
+    }
+    
+}

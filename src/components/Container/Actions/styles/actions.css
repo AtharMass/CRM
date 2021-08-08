@@ -1,0 +1,14 @@
+.border-style-custome{
+    border-bottom: 0.5px solid #dee2e6 !important;
+    background-color: #f7f7f7;
+}
+
+.card-actions-style{
+        width: 80%;
+        margin: auto;
+        margin-top:70px;
+}
+
+.card-body-actions{
+    padding: 0 !important;
+}

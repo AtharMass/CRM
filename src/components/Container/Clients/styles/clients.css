@@ -1,0 +1,22 @@
+.table-style{
+    color: #181f29 !important;
+    box-shadow: #04040466 3px 0px 10px;
+}
+
+.card-clients-style {
+    width: 90%;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.th-custome-style{
+    background-color: #ffcc35;
+    height: 50px;
+}
+
+.clients-section-header{
+    font-size: 22px;
+    font-weight: bold;
+    /* font-family: "Comic Sans MS"; */
+}

@@ -1,0 +1,14 @@
+#dropdown-item-button-email-type, #dropdown-item-button-owner, #dropdown-item-button-client{
+    background-color: #e4e1e1;
+    color: black;
+    border-color: #d7d2d2;
+    width: 100%;
+}
+
+.btn-update-custome{
+    width: 100%;
+}
+
+.center-carde{
+    margin-top: 30%;
+}

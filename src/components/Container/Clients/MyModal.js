@@ -14,6 +14,7 @@ function MyModal(props) {
   const [first, setFirst] = useState(props.client.first)
   const [last, setLast] = useState(props.client.last)
   const [country, setCountry] = useState(props.client.country)
+  
 
   const handleChange = event => {
     let target = event.target
@@ -58,12 +59,27 @@ function MyModal(props) {
         </Row>
 
         <Row className="mt-3">
-          <Form.Label column="sm" lg={2}>
+            <Form.Label column="sm" lg={2}>
+                Country
+            </Form.Label>
+            <Col> 
+                {
+                    <select id="dropdown-item-button-client" className="form-control" defaultValue={country} name="country" onChange={handleChange}>
+                      
+                        {props.countries.map(country =>  
+                          <option key={country.id}  value={country.country} >
+                            {country.country} 
+                          </option>
+                          )}
+                    </select>
+                }
+            </Col>
+          {/* <Form.Label column="sm" lg={2}>
             Country
           </Form.Label>
           <Col>
             <Form.Control size="sm" type="text" name="country" placeholder="Country" defaultValue={country} onChange={handleChange}/>
-          </Col>
+          </Col> */}
         </Row>
 
       </Modal.Body>

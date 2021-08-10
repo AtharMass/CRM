@@ -7,17 +7,16 @@ const router = express.Router()
 router.get('/clients', function (request, response) {
     let {offset} = request.query
     let limit = 20
-    console.log(request.query)
+    
     sequelize
-    .query(`SELECT client.*, country.country, owner.owner 
-            FROM client JOIN country JOIN owner
-            WHERE country.id =  client.country_id
-            AND owner.id =  client.owner_id
+    .query(`SELECT client.*, country.country, owner.owner, email_type.email_type
+            FROM client JOIN country ON country.id =  client.country_id
+            JOIN owner ON  owner.id =  client.owner_id 
+            LEFT JOIN email_type ON email_type.id = client.email_type_id 
             ORDER BY client.id LIMIT ${limit} OFFSET ${!offset ? 0: (offset-1)*limit}`)
     .then(function ([result]) {
         response.send(result)
     }) 
-   
 })
 
 router.get('/countries', function (req, res) {
@@ -39,9 +38,7 @@ router.get('/owners', function (req, res) {
 router.put('/clients/:id', async function (request, response) {
     let data = request.body
     let { id } = request.params
-    console.log(id," from api")
-    console.log(data.name)
-    console.log(data.country)
+ 
     let result = {code: 400, message: "Failed"}
     let country = await findByID('country', 'country', data.country)
 
@@ -69,9 +66,68 @@ router.put('/clients/:id', async function (request, response) {
     // }
 })
 
+router.put('/clientsOwner/:id', async function (request, response) {
+    let data = request.body
+    let { id } = request.params
+ 
+    let result = {code: 400, message: "Failed"}
+    let owner = await findByID('owner', 'owner', data.owner)
+
+    sequelize
+    .query(`UPDATE client SET 
+            owner_id = ${owner} 
+            WHERE id = ${id}`)
+    .then(function (data) {
+        result.code = 200
+        result.message = "The client successfuly updated"
+    }) 
+
+    response.send(result) 
+}) 
+
+router.put('/clientsEmailType', async function (request, response) {
+    let data = request.body
+ 
+    let result = {code: 400, message: "Failed"}
+    
+    let email = await findByID('email_type', 'email_type', data.emailType)
+
+
+    sequelize
+    .query(`UPDATE client SET 
+            email_type_id = ${email} 
+            WHERE id = ${data.id}`)
+    .then(function (data) {
+
+        result.code = 200
+        result.message = "The client successfuly updated"
+        response.send(result) 
+    }) 
+
+})
+
+router.put('/clientsSold', async function (request, response) {
+    let data = request.body
+ 
+    let result = {code: 400, message: "Failed"}
+    
+    sequelize
+    .query(`UPDATE client SET 
+            sold= true
+            WHERE id = ${data.id}`)
+    .then(function (data) {
+
+        result.code = 200
+        result.message = "The client successfuly updated"
+        response.send(result) 
+    }) 
+
+})
+
 const findByID = async (table, name, value) => {
     let query = `SELECT id FROM ${table} WHERE ${name} = "${value}"`
     let results = await sequelize.query(query)
+
     return results[0][0].id
 }
 
@@ -89,7 +145,7 @@ router.post('/clients', async function (request, response) {
     .then(function (data) {
         result.code = 200
         result.message = "The client inserted successfuly"
-        console.log(data)
+        // response.client = 
         response.send(result) 
     }) 
    

@@ -1,13 +1,27 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { observer, inject } from 'mobx-react'
 import Table from 'react-bootstrap/Table'
 import Card from 'react-bootstrap/Card'
 import Pagination from 'react-bootstrap/Pagination'
 import './styles/clients.css'
 import Client  from './Client'
+import axios from 'axios'
 
 function Clients(props) {
-    
+    const [countries, setCountries] = useState([])
+
+    const getCountries = () => {
+        return  axios.get("http://localhost:8080/countries")
+    }
+
+    useEffect(() => {
+        async function fetchData() {
+            const countriesData = await getCountries()
+            setCountries(countriesData.data)
+        }
+        fetchData()
+    },[])
+
     return (
         <Card className="card-clients-style  pb-4">  
             <Card.Header className="clients-section-header">Clients</Card.Header>
@@ -26,7 +40,7 @@ function Clients(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {props.clients.clients.map((client, index) => <Client key={index} client={client}/>)}
+                        {props.clients.clients.map((client, index) => <Client countries={countries} key={index} client={client}/>)}
                     </tbody>
                 </Table>
                 <Pagination>

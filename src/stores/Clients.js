@@ -15,17 +15,42 @@ export class Clients {
             updateSold: action,
             updateOwner: action,
             updateEmailType: action,
-            numClients: computed
+
+            numClients: computed, 
+            addNewClient: action
         })
     }
 
-    storeClient = (clients) => {
-       this.clients = [...clients]
+    getClients = ()=>{
+        return  axios.get("http://localhost:8080/clients")
     }
 
-    addClient = (_id, name, surname, email, owner, country, firstContact, emailType, sold) => {
-        let client = new Client(_id, name, surname, email, owner, country, firstContact, emailType, sold)
-        this.clients.push(client)
+    storeClient = async () => {
+       let clients = await this.getClients()
+       this.clients = [...clients.data]
+       console.log( this.clients)
+    }
+
+    addNewClient =  client => {
+        return axios.post(`http://localhost:8080/clients`,client)
+    }
+
+    addClient = async (_id, name, surname, email, owner, country, firstContact, emailType, sold) => {
+        let client ={
+            first: name,
+            last: surname,
+            email: email,
+            owner: owner || "Emily Durham",
+            country: country || "Albania",
+            date: null,
+            emailType: null,
+            sold: false
+        }
+    
+        const response = await this.addNewClient(client)
+        // let client = new Client(iname, surname, email, owner, country)
+        let clientStore = new Client(_id, name, surname, email, owner, country, new Date().toLocaleDateString(), emailType, sold)
+        this.clients.push(clientStore)
     }
 
 
@@ -45,25 +70,40 @@ export class Clients {
         }
     }
 
-    updateSold = id => {
-        let client = this.clients.find(client => client._id === id)
+    updateSold = async id => {
+        let data = {id: id}
+
+        await axios.put(`http://localhost:8080/clientsSold`, data) 
+
+        let client = this.clients.find(client => client.id === id)
 
         if(client)
             client.sold = !client.sold
     }
 
-    updateOwner = (id, owner) => {
-        let client = this.clients.find(client => client._id === id)
+    updateOwner = async (id, owner) => {
+        let data = {owner: owner}
+
+        await axios.put(`http://localhost:8080/clientsOwner/${id}`, data)           
+
+        let client = this.clients.find(client => client.id === id)
 
         if(client)
             client.owner = owner
     }
 
-    updateEmailType = (id, emailType) => {
-        let client = this.clients.find(client => client._id === id)
+    updateEmailType = async (id, emailType) => {
+        let data = {
+            emailType: emailType,
+            id: id
+        }
+
+        await axios.put(`http://localhost:8080/clientsEmailType`, data)
+
+        let client = this.clients.find(client => client.id === id)
 
         if(client)
-            client.emailType = emailType
+            client.email_type = emailType
     }
 
     get numClients(){

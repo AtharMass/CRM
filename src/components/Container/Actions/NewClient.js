@@ -11,40 +11,22 @@ import { withRouter } from "react-router"
 
 function NewClient(props) {
     const [name, setName] = useState("")
-    let [countries, setCountries] = useState([])
-    let [owners, setOwners] = useState([])
+    const [countries, setCountries] = useState([])
     const [surname, setSurname] = useState("")
     const [country, setCountry] = useState("")
     const [owner, setOwner] = useState("")
     const [email, setEmail] = useState("")
 
-    const updateCountries = countriesData => {
-        return setCountries(countries = countriesData)   
-    }
-
-    const updateOwners = ownersData => {
-        return setOwners(countries = ownersData)   
-    }
-
-    const getOwners = async () => {
-        return  axios.get("http://localhost:8080/owners")
-    }
-
     const getCountries = async () => {
         return  axios.get("http://localhost:8080/countries")
     }
-    
-    const addNewClient = async client => {
-        return axios.post(`http://localhost:8080/clients`,client)
-    }
   
-     useEffect( async () => {
-        const countriesData = await getCountries()
-        updateCountries(countriesData.data)
-
-        const ownersData = await getOwners()
-        updateOwners(ownersData.data)
-        
+     useEffect( () => {
+            async function fetchData() {
+                const countriesData = await getCountries()
+                setCountries(countriesData.data)
+            }
+            fetchData()
     },[])
        
     const handleChange = event => {
@@ -70,9 +52,9 @@ function NewClient(props) {
             emailType: null,
             sold: false
         }
-
-        const response = await addNewClient(client)
-        console.log(response)
+        props.clients.addClient(null,name,surname,email,owner,country,null,null,false)
+        // const response = await addNewClient(client)
+        // console.log(response)
         console.log("Client successfully added with values name:", name, ", surename:  ", surname, ", country:  ", country)
         props.history.push("/clients")
     }
@@ -127,7 +109,7 @@ function NewClient(props) {
                 <Col>
                     {
                         <select id="dropdown-item-button-client" className="form-control" name="owner" onChange={handleChange}>
-                            {owners.map(owner =>  <option key={owner.id}  value={owner.owner} >{owner.owner} </option>)}
+                            {props.owners.map(owner =>  <option key={owner.id}  value={owner.owner} >{owner.owner} </option>)}
                         </select>
                     }
                     {/* <Form.Control size="sm" type="text" name="owner" placeholder="Owner" defaultValue={owner} onChange={handleChange}/> */}

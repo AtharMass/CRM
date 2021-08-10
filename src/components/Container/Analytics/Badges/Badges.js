@@ -1,16 +1,19 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import Badage from './Badge'
 import CardGroup from 'react-bootstrap/CardGroup'
 import chart1 from './icons/chart1.png'
 import chart2 from './icons/chart2.png'
 import chart3 from './icons/chart3.png'
 import chart4 from './icons/chart4.png'
+import axios from 'axios'
+
+
 
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ]
 
-let badges =[
+let badgesData =[
     {
         image: chart1,
         value: 14,
@@ -35,6 +38,24 @@ let badges =[
 ]
 
 function Badges() {
+    const [badges, setBadges] = useState([...badgesData])
+
+    const newClients = () => {
+        let data = {
+            month:  (new Date()).getMonth()+1,
+            year: (new Date()).getMonth()
+        }
+        return  axios.get(`http://localhost:8080/newClients?month=${data.month}&year=${data.year}`)
+    }
+
+    useEffect(async ()=>{
+        let countClients = await newClients()
+        console.log(countClients.data.data)
+        // setBadges(...badges , badges[0].value = countClients.data.data)
+        console.log(badges[0].value)
+    },[])
+
+        {console.log(badges)}
     return (
         <CardGroup>
             {badges.map((badge, index) => <Badage key={index} badge={badge}/>)}

@@ -151,7 +151,22 @@ router.post('/clients', async function (request, response) {
    
 })
 
+router.get('/newClients', async function (request, response) {
+    let {month,year} =  request.query
 
+    let months = await sequelize.query(` SELECT count(client.date) AS COUNT
+                                         FROM client
+                  
+                                   WHERE (date >= '${month}/1/${year}' AND date<= '${month}/31/${year}')`);
+    let result = {data: months[0][0].COUNT}
+    response.send(result)
+    // sequelize
+    // .query(`SELECT * 
+    //         FROM client`)
+    // .then(function ([result]) {
+    //     response.send(result)
+    // }) 
+})
 
 // router.post('/transaction', function (request, response) {
 //     let data = request.body

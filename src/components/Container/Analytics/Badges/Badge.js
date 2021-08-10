@@ -5,8 +5,11 @@ import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
 import Image from 'react-bootstrap/Image'
 import '../styles/badge.css'
+
+
 function Badge(props) {
     return (
+       
         <Card className="badge-style m-3 pb-4"> 
             <Row className="mt-3">
                 <Form.Label column="sm" lg={4}>
